@@ -7,6 +7,7 @@ const productController = require('../controllers/productController');
 const cardController = require('../controllers/cardController');
 const roleController = require('../controllers/roleController');
 const userController = require('../controllers/userController');
+const clientController = require('../controllers/clientController');
 
 // Brand routes
 router.get('/brands', brandController.getBrands);
@@ -50,4 +51,9 @@ router.post('/users', userController.createUser);
 router.put('/users/:id', userController.updateUser);
 router.put('/users/delete/:id', userController.deleteUser);
 
+//Client routes
+router.get('/clients', clientController.getClients);
+router.get('/clients/:id', clientController.getClient);
+router.post('/clients', clientController.createClient);
+router.put('/clients/:id', clientController.updateClient);
 module.exports = router;

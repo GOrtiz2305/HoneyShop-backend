@@ -1,12 +1,20 @@
 const {sequelize} = require('../database/database');
 const { DataTypes } = require('sequelize');
 
-const User = sequelize.define('users', {
-    email: {
+const Client = sequelize.define('clients', {
+    names: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    password: {
+    last_names: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    address: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    phone: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -15,10 +23,10 @@ const User = sequelize.define('users', {
         allowNull: false,
         defaultValue: true
     },
-    role_id: {
+    user_id: {
         type: DataTypes.INTEGER,
         defaultValue: 1
     }
 });
 
-module.exports = User;
+module.exports = Client;

@@ -48,7 +48,7 @@ module.exports = {
                 
             })*/
 
-            const user = await userModel.create({ full_name, email, password });
+            const user = await userModel.create({ email, password });
             res.json(user);
         } catch (error) {
             console.error(error);
