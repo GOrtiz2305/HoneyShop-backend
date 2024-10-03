@@ -46,6 +46,20 @@ module.exports = {
         }
     },
 
+    //Get client by user_id
+    async getClientByUserId(req, res) {
+        try {
+            const { user_id } = req.params;
+            const client = await clientModel.findOne({ where: { user_id } });
+            res.json(client);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                message: 'Error en el servidor'
+            });
+        }
+    },
+
     //Update client
     async updateClient(req, res) {
         try {

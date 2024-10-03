@@ -54,7 +54,9 @@ router.put('/users/delete/:id', userController.deleteUser);
 
 //Client routes
 router.get('/clients', clientController.getClients);
+router.get('/clients/user/:user_id', clientController.getClientByUserId);
 router.get('/clients/:id', clientController.getClient);
 router.post('/clients', clientController.createClient);
 router.put('/clients/:id', clientController.updateClient);
+
 module.exports = router;
