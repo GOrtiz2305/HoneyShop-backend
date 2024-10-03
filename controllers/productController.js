@@ -200,5 +200,30 @@ module.exports = {
                 message: 'Error en el servidor'
             });
         }
-    }
+    },
+
+    //Get product where name is like, for search
+    async getProductByName(req, res) {
+        try {
+          const { product_name } = req.body;
+      
+          // Validación básica
+          if (!product_name || typeof product_name !== 'string') {
+            return res.status(400).json({ error: 'El nombre del producto es requerido y debe ser una cadena' });
+          }
+      
+          const products = await productModel.findAll({
+            where: {
+              product_name: {
+                [Op.iLike]: `%${product_name}%` // Búsqueda sin distinción de mayúsculas y minúsculas
+              }
+            }
+          });
+      
+          res.json(products);
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ error: 'Error al buscar productos' });
+        }
+      }
 }
