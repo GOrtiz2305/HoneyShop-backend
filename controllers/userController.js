@@ -19,7 +19,7 @@ module.exports = {
             const { email, password } = req.body;
             const user = await userModel.findOne({ where: { email, password } });
             if (user) {
-                const token = jwt.sign({ user }, 'secretkey', { expiresIn: '5m' });
+                const token = jwt.sign({ user }, 'secretkey', { expiresIn: '10m' });
                 res.json({ token });
             } else {
                 res.status(401).json({ error: "Usuario no encontrado" });
