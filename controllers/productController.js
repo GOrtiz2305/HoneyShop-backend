@@ -107,13 +107,13 @@ module.exports = {
             const product = await productModel.findByPk(id);
             product.stock = stock;
             product.product_name = product_name;
-            /*product.price = price;
-            product.discount_price = discount_price;
-            product.discount = discount;
+            product.price = price;
+            // product.discount_price = discount_price;
+            // product.discount = discount;
             product.product_description = product_description;
-            product.image = image;
-            product.brand_id = brand_id;
-            product.presentation_id = presentation_id;*/
+            // product.image = image;
+            // product.brand_id = brand_id;
+            // product.presentation_id = presentation_id;
 
             await product.save();
             res.json(product);
