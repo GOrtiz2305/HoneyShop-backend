@@ -26,9 +26,9 @@ module.exports = {
 
     async updateBrand(req, res) {
         try {
-            const { id_brand } = req.params;
+            const { id } = req.params;
             const { brand_name } = req.body;
-            await Brand.update({ brand_name }, { where: { id_brand } });
+            await Brand.update({ brand_name }, { where: { id } });
             res.json({
                 message: 'Marca actualizada'
             });
@@ -42,8 +42,8 @@ module.exports = {
 
     async deleteBrand(req, res) {
         try {
-            const { id_brand } = req.params;
-            await Brand.destroy({ where: { id_brand } });
+            const { id } = req.params;
+            await Brand.destroy({ where: { id } });
             res.json({
                 message: 'Marca eliminada'
             });
