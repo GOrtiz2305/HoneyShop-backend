@@ -26,7 +26,7 @@ module.exports = {
 
     async updateBrand(req, res) {
         try {
-            const { id } = req.params;
+            const { id_brand } = req.params;
             const { brand_name } = req.body;
             await Brand.update({ brand_name }, { where: { id_brand } });
             res.json({
@@ -42,7 +42,7 @@ module.exports = {
 
     async deleteBrand(req, res) {
         try {
-            const { id } = req.params;
+            const { id_brand } = req.params;
             await Brand.destroy({ where: { id_brand } });
             res.json({
                 message: 'Marca eliminada'
