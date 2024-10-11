@@ -11,10 +11,10 @@ module.exports = {
         }
     },
 
-    async getBrand (req, res) {
+    async getBrand(req, res) {
         try {
             const { id } = req.params;
-            const brand = await Brand.findOne({ where: { id } });
+            const brand = await brandModels.findByPk(id);
             res.json(brand);
         } catch (error) {
             console.error(error);
