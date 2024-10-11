@@ -11,6 +11,7 @@ const clientController = require('../controllers/clientController');
 
 // Brand routes
 router.get('/brands', brandController.getBrands);
+router.get('/brands/:id', brandController.getBrand);
 router.post('/brands', brandController.createBrand);
 router.put('/brands/:id', brandController.updateBrand);
 router.delete('/brands/:id', brandController.deleteBrand);

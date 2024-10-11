@@ -3,14 +3,27 @@ const brandModels = require('../models/brandModel');
 module.exports = {
     async getBrands(req, res) {
         try {
-          const brands = await brandModels.findAll();
-          res.json(brands);
+            const brands = await brandModels.findAll();
+            res.json(brands);
         } catch (error) {
-          console.log(error);
-          res.json({ error: "Error en el controlador" });
+            console.log(error);
+            res.json({ error: "Error en el controlador" });
         }
-      },
+    },
 
+    async getBrand (req, res) {
+        try {
+            const { id } = req.params;
+            const brand = await Brand.findOne({ where: { id } });
+            res.json(brand);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                message: 'Error en el servidor'
+            });
+        }
+    },
+    
     async createBrand(req, res) {
         try {
             const { brand_name } = req.body;
