@@ -99,7 +99,7 @@ module.exports = {
         }
     },
 
-    //Update product stock
+    //Update product
     async updateProduct(req, res) {
         try {
             const { id } = req.params;
@@ -108,12 +108,7 @@ module.exports = {
             product.stock = stock;
             product.product_name = product_name;
             product.price = price;
-            // product.discount_price = discount_price;
-            // product.discount = discount;
             product.product_description = product_description;
-            // product.image = image;
-            // product.brand_id = brand_id;
-            // product.presentation_id = presentation_id;
 
             await product.save();
             res.json(product);
@@ -122,6 +117,31 @@ module.exports = {
             res.status(500).json({
                 message: 'Error en el servidor'
             });
+        }
+    },
+
+    //Update product stock
+    async updateProductStock(res, product_id, quantity) {
+        try {
+            const product = await productModel.findByPk(product_id);
+
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            const updatedStock = product.stock - quantity;
+
+            if (updatedStock < 0) {
+                return res.status(400).json({ message: 'Insufficient stock' });
+            }
+
+            product.stock = updatedStock;
+            await product.save();
+
+            return product;
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     },
 
@@ -137,7 +157,7 @@ module.exports = {
             });
         }
     },
-    
+
     async sellProduct(req, res) {
         try {
             const { id } = req.params;
@@ -205,25 +225,25 @@ module.exports = {
     //Get product where name is like, for search
     async getProductByName(req, res) {
         try {
-          const { product_name } = req.body;
-      
-          // Validación básica
-          if (!product_name || typeof product_name !== 'string') {
-            return res.status(400).json({ error: 'El nombre del producto es requerido y debe ser una cadena' });
-          }
-      
-          const products = await productModel.findAll({
-            where: {
-              product_name: {
-                [Op.iLike]: `%${product_name}%` // Búsqueda sin distinción de mayúsculas y minúsculas
-              }
+            const { product_name } = req.body;
+
+            // Validación básica
+            if (!product_name || typeof product_name !== 'string') {
+                return res.status(400).json({ error: 'El nombre del producto es requerido y debe ser una cadena' });
             }
-          });
-      
-          res.json(products);
+
+            const products = await productModel.findAll({
+                where: {
+                    product_name: {
+                        [Op.iLike]: `%${product_name}%` // Búsqueda sin distinción de mayúsculas y minúsculas
+                    }
+                }
+            });
+
+            res.json(products);
         } catch (error) {
-          console.error(error);
-          res.status(500).json({ error: 'Error al buscar productos' });
+            console.error(error);
+            res.status(500).json({ error: 'Error al buscar productos' });
         }
-      }
+    }
 }
