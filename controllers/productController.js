@@ -121,7 +121,7 @@ module.exports = {
     },
 
     //Update product stock
-    async updateProductStock(res, product_id, quantity) {
+    async updateProductStock(product_id, quantity) {
         try {
             const product = await productModel.findByPk(product_id);
 
