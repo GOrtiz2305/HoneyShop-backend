@@ -8,19 +8,19 @@ module.exports = {
     //Gets all orders
     async getOrders(req, res) {
         try {
-            const orders = await ordersController.getOrders();
+            const orders = await orderModel.findAll();
             res.json(orders);
-        } catch (error) {
+          } catch (error) {
             console.log(error);
             res.json({ error: "Error en el controlador" });
-        }
+          }
     },
 
     //Gets order by id
     async getOrder(req, res) {
         try {
             const { id } = req.params;
-            const order = await ordersController.getOrder(id);
+            const order = await orderModel.findOne({ where: { id } });
             res.json(order);
         } catch (error) {
             console.error(error);
@@ -81,19 +81,4 @@ module.exports = {
             throw new Error('Error al actualizar el monto total de la orden');
         }
     },
-
-    async deleteOrder(req, res) {
-        try {
-            const { id } = req.params;
-            await ordersController.deleteOrder(id);
-            res.json({
-                message: 'Orden eliminada'
-            });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({
-                message: 'Error en el servidor'
-            });
-        }
-    }
 }
