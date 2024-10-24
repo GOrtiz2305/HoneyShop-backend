@@ -20,7 +20,6 @@ const Client = sequelize.define('clients', {
     },
     status: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
         defaultValue: true
     },
     user_id: {

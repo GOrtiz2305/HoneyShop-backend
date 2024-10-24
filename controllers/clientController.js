@@ -2,14 +2,16 @@ const userModel = require('../models/userModel');
 const clientModel = require('../models/clientModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { createUser } = require('./userController');
 
 module.exports = {
     //CREATE client and user
     async createClient(req, res) {
         try {
-            const { full_name, email, password, names, last_names, address, phone } = req.body;
-            const user = await createUser({ email, password });
+            const { email, password, names, last_names, address, phone } = req.body;
+            // Hash the password before creating the user
+            const hashedPassword = await bcrypt.hash(password, 10);
+            
+            const user = await userModel.create({ email, password: hashedPassword });
             const client = await clientModel.create({ names, last_names, address, email, phone, user_id: user.id });
             res.json(client);
         } catch (error) {
