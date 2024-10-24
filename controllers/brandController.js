@@ -1,6 +1,7 @@
 const brandModels = require('../models/brandModel');
 
 module.exports = {
+    //GETS all brands
     async getBrands(req, res) {
         try {
             const brands = await brandModels.findAll();
@@ -11,6 +12,7 @@ module.exports = {
         }
     },
 
+    //GET brand by id
     async getBrand(req, res) {
         try {
             const { id } = req.params;
@@ -24,6 +26,7 @@ module.exports = {
         }
     },
     
+    //CREATE brand
     async createBrand(req, res) {
         try {
             const { brand_name } = req.body;
@@ -37,6 +40,7 @@ module.exports = {
         }
     },
 
+    //UPDATE brand
     async updateBrand(req, res) {
         try {
             const { id } = req.params;
@@ -53,6 +57,7 @@ module.exports = {
         }
     },
 
+    //DELETE brand
     async deleteBrand(req, res) {
         try {
             const { id } = req.params;

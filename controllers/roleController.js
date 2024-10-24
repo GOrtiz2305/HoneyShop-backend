@@ -1,6 +1,7 @@
 const roleModel = require('../models/roleModel');
 
 module.exports = {
+    //GET all roles
     async getRoles(req, res) {
         try {
             const roles = await roleModel.findAll();
@@ -11,6 +12,7 @@ module.exports = {
         }
     },
 
+    //GET role by id
     async getRoleById (req, res) {
         try {
             const { id } = req.params;
@@ -22,6 +24,7 @@ module.exports = {
         }
     },
 
+    //POST create role
     async createRole(req, res) {
         try {
             const { name, description } = req.body;
@@ -35,6 +38,7 @@ module.exports = {
         }
     },
 
+    //PUT update role
     async updateRole(req, res) {
         try {
             const { id } = req.params;
@@ -51,7 +55,7 @@ module.exports = {
         }
     },
 
-    //Logical deletion
+    //Logical delete
     async deleteRole(req, res) {
         try {
             const { id } = req.params;

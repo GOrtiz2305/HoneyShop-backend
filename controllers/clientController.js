@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 module.exports = {
-    //Create client and user
+    //CREATE client and user
     async createClient(req, res) {
         try {
             const { full_name, email, password, names, last_names, address, phone } = req.body;
@@ -19,7 +19,7 @@ module.exports = {
         }
     },
 
-    //Get all clients
+    //GET all clients
     async getClients(req, res) {
         try {
             const clients = await clientModel.findAll();
@@ -32,7 +32,7 @@ module.exports = {
         }
     },
 
-    //Get client by id
+    //GET client by id
     async getClient(req, res) {
         try {
             const { id } = req.params;
@@ -46,7 +46,7 @@ module.exports = {
         }
     },
 
-    //Get client by user_id
+    //GET client by user_id
     async getClientByUserId(req, res) {
         try {
             const { user_id } = req.params;
@@ -60,11 +60,11 @@ module.exports = {
         }
     },
 
-    //Update client
+    //UPDATE client
     async updateClient(req, res) {
         try {
             const { id } = req.params;
-            const { names, last_names, address, email, phone } = req.body;
+            const { names, last_names, address, phone } = req.body;
             const client = await clientModel.update({ names, last_names, address, phone }, { where: { id } });
             res.json(client);
         } catch (error) {

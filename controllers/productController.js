@@ -5,7 +5,7 @@ const models = require('../models/index');
 
 module.exports = {
 
-    //All products
+    //GET all products
     async getProducts(req, res) {
         try {
             const products = await productModel.findAll({
@@ -27,7 +27,7 @@ module.exports = {
         }
     },
 
-    //All product with status 1
+    //GET all products with status 1
     async getProductsActive(req, res) {
         try {
             const products = await productModel.findAll({
@@ -52,7 +52,7 @@ module.exports = {
         }
     },
 
-    //All product with status 0
+    //GET all products with status 0
     async getProductsInactive(req, res) {
         try {
             const products = await productModel.findAll({
@@ -77,6 +77,7 @@ module.exports = {
         }
     },
 
+    //GET product by id
     async getProduct(req, res) {
         try {
             const { id } = req.params;
@@ -145,6 +146,7 @@ module.exports = {
         }
     },
 
+    //Create product
     async createProduct(req, res) {
         try {
             const { product_name, price, discount_price, discount, product_description, image, stock, brand_id, presentation_id, status } = req.body;
@@ -158,6 +160,7 @@ module.exports = {
         }
     },
 
+    //Sell product
     async sellProduct(req, res) {
         try {
             const { id } = req.params;
@@ -174,6 +177,7 @@ module.exports = {
         }
     },
 
+    //Buy product
     async buyProduct(req, res) {
         try {
             const { id } = req.params;
@@ -190,7 +194,7 @@ module.exports = {
         }
     },
 
-    //Change status to 0
+    //Logic delete, change status to 0
     async deleteProduct(req, res) {
         try {
             const { id } = req.params;
@@ -206,7 +210,7 @@ module.exports = {
         }
     },
 
-    //Change status to 1
+    //Activate product, change status to 1
     async activateProduct(req, res) {
         try {
             const { id } = req.params;

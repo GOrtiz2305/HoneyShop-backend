@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 module.exports = {
+    //GET all users
     async getUsers(req, res) {
         try {
             const users = await userModel.findAll();
@@ -34,8 +35,8 @@ module.exports = {
               }
         }
     },
-   
 
+    //POST create user
     async createUser(req, res) {
         try {
             const { full_name, email, password } = req.body;
@@ -58,6 +59,7 @@ module.exports = {
         }
     },
 
+    //PUT update user
     async updateUser(req, res) {
         try {
             const { id } = req.params;
@@ -75,7 +77,6 @@ module.exports = {
     },
 
     //Logical delete
-
     async deleteUser(req, res) {
         try {
             const { id } = req.params;

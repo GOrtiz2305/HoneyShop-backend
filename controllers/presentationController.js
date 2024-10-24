@@ -1,6 +1,7 @@
 const presentationModel = require('../models/presentationModel');
 
 module.exports = {
+    //GET all presentations
     async getPresentations(req, res) {
         try {
           const presentations = await presentationModel.findAll();
@@ -11,6 +12,7 @@ module.exports = {
         }
       },
 
+    //GET presentation by id
     async getPresentation(req, res) {
         try {
             const { id } = req.params;
@@ -24,6 +26,7 @@ module.exports = {
         }
     },
 
+    //CREATE presentation
     async createPresentation(req, res) {
         try {
             const { presentation_name } = req.body;
@@ -37,6 +40,7 @@ module.exports = {
         }
     },
 
+    //UPDATE presentation
     async updatePresentation(req, res) {
         try {
             const { id } = req.params;
@@ -53,6 +57,7 @@ module.exports = {
         }
     },
 
+    //DELETE presentation
     async deletePresentation(req, res) {
         try {
             const { id } = req.params;

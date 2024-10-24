@@ -5,7 +5,7 @@ const productController = require('../controllers/productController');
 const ordersController = require('../controllers/ordersController');
 
 module.exports = {
-    //Gets all orders
+    //GET all orders
     async getOrders(req, res) {
         try {
             const orders = await orderModel.findAll();
@@ -16,7 +16,7 @@ module.exports = {
           }
     },
 
-    //Gets order by id
+    //GET order by id
     async getOrder(req, res) {
         try {
             const { id } = req.params;
@@ -30,7 +30,7 @@ module.exports = {
         }
     },
 
-    //Create order and order details
+    //CREATE order and order details
     async createOrder(req, res) {
         try {
         // Order header 
@@ -44,7 +44,7 @@ module.exports = {
         const productPromises = products.map(async product => {
             const { product_id, quantity } = product;
             
-            //Get product price
+            //Get product
             let individual_product = await productModel.findByPk(product_id);
 
             //Calculate subtotal
@@ -55,6 +55,7 @@ module.exports = {
             //Update product stock
             await productController.updateProductStock(product_id, quantity);
 
+            //Create order detail
             return orderDetailModel.create({ order_id, product_id, quantity, subtotal });
         });
 
