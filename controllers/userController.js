@@ -15,28 +15,6 @@ module.exports = {
     },
 
     //GET USER BY EMAIL AND PASSWORD
-    // async getUserByEmailAndPassword(req, res) {
-    //     try {
-    //         const { email, password } = req.body;
-    //         const user = await userModel.findOne({ where: { email, password } });
-
-
-    //         if (user) {
-    //             const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
-    //             res.json({ token });
-    //         } else {
-    //             res.status(401).json({ error: "Usuario no encontrado" });
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //         if (error.name === 'SequelizeUniqueConstraintError') {
-    //             // Handle specific error types here (e.g., duplicate email)
-    //             res.status(400).json({ error: "Error específico relacionado con la base de datos" });
-    //           } else {
-    //             res.status(500).json({ error: "Error interno del servidor" }); // Use status 500 for internal server errors
-    //           }
-    //     }
-    // },
 
     async getUserByEmailAndPassword(req, res) {
         try {
