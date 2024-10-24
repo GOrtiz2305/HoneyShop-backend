@@ -2,8 +2,9 @@ require('dotenv').config();
 const { dbConnectMysql, sequelize } = require('./database/database');	
 const express = require('express');
 const cookieParser = require('cookie-parser');
-
 const app = express();
+const jwt = require('jsonwebtoken');
+
 app.use(express.json())
 
 app.use((req, res, next) => {

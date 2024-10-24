@@ -54,6 +54,9 @@ router.post('/users', userController.createUser);
 router.put('/users/:id', userController.updateUser);
 router.put('/users/delete/:id', userController.deleteUser);
 
+//Token routes
+router.get('/isUserAuth', userController.verifyToken);
+
 //Client routes
 router.get('/clients', clientController.getClients);
 router.get('/clients/user/:user_id', clientController.getClientByUserId);
