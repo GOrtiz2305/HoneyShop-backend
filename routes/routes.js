@@ -36,6 +36,7 @@ router.put('/products/sell/:id', productController.sellProduct);
 router.put('/products/buy/:id', productController.buyProduct);
 router.put('/products/:id', productController.updateProduct);
 router.post('/products/name', productController.getProductByName);
+router.get('/products/stock/:id', productController.getProductStock);
 
 //Card API
 router.get('/cards', cardController.allCards);

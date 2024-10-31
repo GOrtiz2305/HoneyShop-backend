@@ -100,6 +100,18 @@ module.exports = {
         }
     },
 
+    //Get product stock by id
+    async getProductStock(req, res) {
+        try {
+            const { id } = req.params;
+            const product = await productModel.findByPk(id);
+            res.json({ stock: product.stock });
+        } catch (error) {
+            console.log(error);
+            res.json({ error: "Error en el controlador" });
+        }
+    },
+    
     //Update product
     async updateProduct(req, res) {
         try {
