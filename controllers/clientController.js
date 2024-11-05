@@ -7,12 +7,12 @@ module.exports = {
     //CREATE client and user
     async createClient(req, res) {
         try {
-            const { email, password, names, last_names, address, phone } = req.body;
+            const { email, password, names, last_names, address, phone, nit } = req.body;
             // Hash the password before creating the user
             const hashedPassword = await bcrypt.hash(password, 10);
             
             const user = await userModel.create({ email, password: hashedPassword });
-            const client = await clientModel.create({ names, last_names, address, email, phone, user_id: user.id });
+            const client = await clientModel.create({ names, last_names, address, email, phone, nit, user_id: user.id });
             res.json(client);
         } catch (error) {
             console.error(error);

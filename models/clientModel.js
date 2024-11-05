@@ -22,6 +22,9 @@ const Client = sequelize.define('clients', {
         type: DataTypes.BOOLEAN,
         defaultValue: true
     },
+    nit: {
+        type: DataTypes.STRING,
+    },
     user_id: {
         type: DataTypes.INTEGER,
         defaultValue: 1

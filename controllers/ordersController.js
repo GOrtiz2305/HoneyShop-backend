@@ -3,8 +3,11 @@ const orderDetailModel = require('../models/orderDetailModel');
 const productModel = require('../models/productModel');
 const productController = require('../controllers/productController');
 const ordersController = require('../controllers/ordersController');
+const xmlbuilder = require('xmlbuilder');
+const xml2js = require('xml2js');
 
 module.exports = {
+
     //GET all orders
     async getOrders(req, res) {
         try {
