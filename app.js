@@ -32,28 +32,27 @@ app.use(cookieParser());
 
 const PORT = process.env.PORT || 3001;
 
-// Cargar el certificado SSL y la clave privada
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/backend.ortizdev.xyz/privkey.pem');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/backend.ortizdev.xyz/fullchain.pem');
-
-// Crear el servidor HTTPS
-const httpsServer = https.createServer({
-  key: privateKey,
-  cert: certificate
-}, app);
-
 const routes = require('./routes/routes');
 app.use('/api', routes);
+
+try {
+  const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/backend.ortizdev.xyz/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/backend.ortizdev.xyz/cert.pem')
+  };
+  
+  https.createServer(options, (req, res) => {
+    res.writeHead(200);
+    res.end('Hello, world!');
+  }).listen(443);
+}
+catch (e) {
+  console.error(e);
+}
 
 app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
     await dbConnectMysql();
-});
-
-// Iniciar el servidor
-httpsServer.listen(PORT, async () => {
-  console.log(`Servidor HTTPS escuchando en el puerto ${port}`);
-  await dbConnectMysql();
 });
 
 sequelize.sync()
