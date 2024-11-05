@@ -51,7 +51,7 @@ app.listen(PORT, async () => {
 });
 
 // Iniciar el servidor
-httpsServer.listen(port, async () => {
+httpsServer.listen(PORT, async () => {
   console.log(`Servidor HTTPS escuchando en el puerto ${port}`);
   await dbConnectMysql();
 });
