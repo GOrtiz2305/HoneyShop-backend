@@ -3,7 +3,8 @@ const { dbConnectMysql, sequelize } = require('./database/database');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const app = express();
-const jwt = require('jsonwebtoken');
+const https = require('https');
+const fs = require('fs');
 
 app.use(express.json())
 
@@ -29,14 +30,29 @@ app.use((req, res, next) => {
   });
 app.use(cookieParser());
 
+const PORT = process.env.PORT || 3001;
+
+// Cargar el certificado SSL y la clave privada
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/backend.ortizdev.xyz/privkey.pem');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/backend.ortizdev.xyz/fullchain.pem');
+
+// Crear el servidor HTTPS
+const httpsServer = https.createServer({
+  key: privateKey,
+  cert: certificate
+}, app);
+
 const routes = require('./routes/routes');
 app.use('/api', routes);
-
-const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
     await dbConnectMysql();
+});
+
+// Iniciar el servidor
+httpsServer.listen(port, () => {
+  console.log(`Servidor HTTPS escuchando en el puerto ${port}`);
 });
 
 sequelize.sync()
