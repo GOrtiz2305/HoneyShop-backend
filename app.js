@@ -44,7 +44,7 @@ try {
   https.createServer(options, async (req, res) => {
     res.writeHead(200);
     await dbConnectMysql();
-    res.end('Hello, world!');
+    //res.end('Hello, world!');
   }).listen(PORT);
 }
 catch (e) {
