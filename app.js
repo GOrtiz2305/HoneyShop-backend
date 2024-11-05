@@ -51,8 +51,9 @@ app.listen(PORT, async () => {
 });
 
 // Iniciar el servidor
-httpsServer.listen(port, () => {
+httpsServer.listen(port, async () => {
   console.log(`Servidor HTTPS escuchando en el puerto ${port}`);
+  await dbConnectMysql();
 });
 
 sequelize.sync()
