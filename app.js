@@ -41,19 +41,20 @@ try {
     cert: fs.readFileSync('/etc/letsencrypt/live/backend.ortizdev.xyz/cert.pem')
   };
   
-  https.createServer(options, (req, res) => {
+  https.createServer(options, async (req, res) => {
     res.writeHead(200);
+    await dbConnectMysql();
     res.end('Hello, world!');
-  }).listen(443);
+  }).listen(PORT);
 }
 catch (e) {
   console.error(e);
 }
 
-app.listen(PORT, async () => {
+/*app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
     await dbConnectMysql();
-});
+});*/
 
 sequelize.sync()
     .then(() => {
