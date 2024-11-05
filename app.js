@@ -25,7 +25,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(express.json())
 
 app.use(cookieParser());
@@ -63,8 +62,8 @@ app.listen(process.env.HTTP_PORT || 3000, () => {
 if (process.env.HTTPS_ENABLED === 'true') {
   try {
     const options = {
-      key: fs.readFileSync('/etc/letsencrypt/live/backend.ortizdev.xyz/privkey.pem'),
-      cert: fs.readFileSync('/etc/letsencrypt/live/backend.ortizdev.xyz/cert.pem'),
+      key: fs.readFileSync('/projects/HoneyShop-backend/privkey.pem'),
+      cert: fs.readFileSync('/projects/HoneyShop-backend/cert.pem'),
     };
 
     const httpsServer = https.createServer(options, app);
