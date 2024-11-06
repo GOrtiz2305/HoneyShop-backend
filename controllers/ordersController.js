@@ -33,15 +33,29 @@ module.exports = {
         }
     },
 
+    async getOrdersByClientId(req, res) {
+        try {
+            const { client_id } = req.params;
+            const orders = await orderModel.findAll({ where: { client_id } });
+            res.json(orders);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error en el servidor' });
+        }
+    },
+
     //CREATE order and order details
     async createOrder(req, res) {
         try {
             const nit_emisor = '123456789';
-             
             // Order header 
             const { client_id, date, totalAmount, address, paymentMethod, notes, products } = req.body;
             const order = await orderModel.create({ client_id, date, totalAmount, address, paymentMethod, notes });
 
+            //Get client by id
+            const client = await clientModel.findByPk(client_id);
+            const nit_receptor = client.nit;
+            const descuento = 0;
             // Order details and calculating total
             let total = 0;
 

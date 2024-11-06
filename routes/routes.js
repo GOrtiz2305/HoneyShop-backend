@@ -68,6 +68,7 @@ router.put('/clients/:id', clientController.updateClient);
 //Order routes
 router.get('/orders', orderController.getOrders);
 router.get('/orders/:id', orderController.getOrder);
+router.get('/orders/client/:client_id', orderController.getOrdersByClientId);
 router.post('/orders', orderController.createOrder);
 router.put('/orders/:id', orderController.updateOrder);
 
