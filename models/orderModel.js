@@ -26,6 +26,9 @@ const Order = sequelize.define('orders', {
     paymentMethod: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    notes: {
+        type: DataTypes.STRING
     }
 });
 

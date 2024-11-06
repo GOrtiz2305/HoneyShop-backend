@@ -13,10 +13,10 @@ module.exports = {
         try {
             const orders = await orderModel.findAll();
             res.json(orders);
-          } catch (error) {
+        } catch (error) {
             console.log(error);
             res.json({ error: "Error en el controlador" });
-          }
+        }
     },
 
     //GET order by id
@@ -36,43 +36,45 @@ module.exports = {
     //CREATE order and order details
     async createOrder(req, res) {
         try {
-        // Order header 
-        const { client_id, date, totalAmount, address, paymentMethod, notes, products } = req.body;
-        const order = await orderModel.create({ client_id, date, totalAmount, address, paymentMethod, notes });
+            const nit_emisor = '123456789';
+             
+            // Order header 
+            const { client_id, date, totalAmount, address, paymentMethod, notes, products } = req.body;
+            const order = await orderModel.create({ client_id, date, totalAmount, address, paymentMethod, notes });
 
-        // Order details and calculating total
-        let total = 0;
+            // Order details and calculating total
+            let total = 0;
 
-        // Maps through products and creates order details
-        const productPromises = products.map(async product => {
-            const { product_id, quantity } = product;
-            
-            //Get product
-            let individual_product = await productModel.findByPk(product_id);
+            // Maps through products and creates order details
+            const productPromises = products.map(async product => {
+                const { product_id, quantity } = product;
 
-            //Calculate subtotal
-            const subtotal = individual_product.price * product.quantity;
-            const order_id = order.id;
-            total += subtotal;
+                //Get product
+                let individual_product = await productModel.findByPk(product_id);
 
-            //Update product stock
-            await productController.updateProductStock(product_id, quantity);
+                //Calculate subtotal
+                const subtotal = individual_product.price * product.quantity;
+                const order_id = order.id;
+                total += subtotal;
 
-            //Create order detail
-            return orderDetailModel.create({ order_id, product_id, quantity, subtotal });
-        });
+                //Update product stock
+                await productController.updateProductStock(product_id, quantity);
 
-        await Promise.all(productPromises);
+                //Create order detail
+                return orderDetailModel.create({ order_id, product_id, quantity, subtotal });
+            });
 
-        // Update total amount of order
-        order.totalAmount = total;
-        await order.save();
+            await Promise.all(productPromises);
 
-        res.json(order);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error en el servidor' });
-    }
+            // Update total amount of order
+            order.totalAmount = total;
+            await order.save();
+
+            res.json(order);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error en el servidor' });
+        }
     },
 
     //Update status of order
