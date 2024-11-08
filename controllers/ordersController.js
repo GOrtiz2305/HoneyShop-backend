@@ -1,10 +1,9 @@
 const orderModel = require('../models/orderModel');
 const orderDetailModel = require('../models/orderDetailModel');
-const productModel = require('../models/productModel');
+const Product = require('../models/index').Product;
 const productController = require('../controllers/productController');
 const ordersController = require('../controllers/ordersController');
-const xmlbuilder = require('xmlbuilder');
-const xml2js = require('xml2js');
+const { verifyToken } = require('./userController');
 
 module.exports = {
 
@@ -36,6 +35,7 @@ module.exports = {
     async getOrdersByClientId(req, res) {
         try {
             const { client_id } = req.params;
+
             const orders = await orderModel.findAll({ where: { client_id } });
             res.json(orders);
         } catch (error) {
@@ -47,15 +47,10 @@ module.exports = {
     //CREATE order and order details
     async createOrder(req, res) {
         try {
-            const nit_emisor = '123456789';
             // Order header 
             const { client_id, date, totalAmount, address, paymentMethod, notes, products } = req.body;
             const order = await orderModel.create({ client_id, date, totalAmount, address, paymentMethod, notes });
 
-            //Get client by id
-            const client = await clientModel.findByPk(client_id);
-            const nit_receptor = client.nit;
-            const descuento = 0;
             // Order details and calculating total
             let total = 0;
 
@@ -64,7 +59,7 @@ module.exports = {
                 const { product_id, quantity } = product;
 
                 //Get product
-                let individual_product = await productModel.findByPk(product_id);
+                let individual_product = await Product.findByPk(product_id);
 
                 //Calculate subtotal
                 const subtotal = individual_product.price * product.quantity;
@@ -94,8 +89,14 @@ module.exports = {
     //Update status of order
     async updateOrder(req, res) {
         try {
+            const { id } = req.params;
+            const { status } = req.body;
+
             await orderModel.update({ status }, {
-                where: { id: orderId }
+                where: { id: id }
+            });
+            res.json({
+                message: 'Orden actualizada'
             });
         } catch (error) {
             throw new Error('Error al actualizar el monto total de la orden');

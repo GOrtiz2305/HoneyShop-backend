@@ -34,8 +34,8 @@ module.exports = {
                 // Generate a JWT token on successful login
                 const id = user.id;
                 const role = user.role_id;
-                const token = jwt.sign({ id, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1m' });
-                return res.json({ auth: true, token: token, id: id, role: role});
+                const token = jwt.sign({ id, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
+                return res.json({ auth: true, token: token, id: id, role: role });
             } else {
                 return res.status(401).json({ error: "Contraseña incorrecta" });
             }
@@ -61,9 +61,9 @@ module.exports = {
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
                 if (err) {
                     return res.status(500).json({ auth: false, message: 'Failed to authenticate token' });
+                } else {
+                    res.json({ auth: true, message: 'Token verified' });
                 }
-
-                res.json({ auth: true, message: 'Token verified' });
             });
         } catch (error) {
             console.error(error);
@@ -71,6 +71,49 @@ module.exports = {
                 message: 'Error en el servidor'
             });
         }
+    },
+
+    async verificationOfToken(req, res, next) {
+        const token = req.headers['x-access-token'];
+
+        // Verifica si el token está presente
+        if (!token) {
+            return res.status(403).json({ auth: false, message: 'No token provided.' });
+        }
+
+        // Verifica si el token es válido
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ auth: false, message: 'Failed to authenticate token.' });
+            }
+
+            next(); // Continúa con la siguiente función
+        });
+    },
+
+    async verificationOfTokenAndRole(req, res, next) {
+        const token = req.headers['x-access-token'];
+    
+        // Verifica si el token está presente
+        if (!token) {
+            return res.status(403).json({ auth: false, message: 'No token provided.' });
+        }
+    
+        // Verifica si el token es válido
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ auth: false, message: 'Failed to authenticate token.' });
+            }
+    
+            // Token válido, verifica el rol
+            if (decoded.role === 2) {
+                req.userRole = decoded.role; // Puedes guardar el rol o cualquier otro dato que necesites
+                next(); // Continúa con la siguiente función
+            } else {
+                // Si el rol no es 2, devuelve un error
+                return res.status(403).json({ auth: false, message: 'Insufficient permissions.' });
+            }
+        });
     },
 
     //POST create user
@@ -113,6 +156,7 @@ module.exports = {
     async deleteUser(req, res) {
         try {
             const { id } = req.params;
+
             await userModel.update({ status: false }, { where: { id } });
             res.json({
                 message: 'Usuario eliminado'

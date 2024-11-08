@@ -2,10 +2,14 @@ const userModel = require('../models/userModel');
 const clientModel = require('../models/clientModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { verifyToken } = require('./userController');
 
 module.exports = {
     //CREATE client and user
     async createClient(req, res) {
+        // Verificar token y dejar crear cliente solo si es admin
+
+        
         try {
             const { email, password, names, last_names, address, phone, nit } = req.body;
             // Hash the password before creating the user
@@ -65,11 +69,15 @@ module.exports = {
 
     //UPDATE client
     async updateClient(req, res) {
+        //Actualizar cliente solo si es admin y esta autenticado
+
         try {
+            //Llamar a la funcion para verificar el token
             const { id } = req.params;
-            const { names, last_names, address, phone } = req.body;
-            const client = await clientModel.update({ names, last_names, address, phone }, { where: { id } });
-            res.json(client);
+            const { names, last_names, address, phone, nit } = req.body;
+            
+            const client = await clientModel.update({ names, last_names, address, phone, nit }, { where: { id } });
+            res.json("Cliente actualizado correctamente");
         } catch (error) {
             console.error(error);
             res.status(500).json({

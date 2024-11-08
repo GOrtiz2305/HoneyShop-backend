@@ -1,3 +1,4 @@
+const Brand = require('../models/brandModel');
 const brandModels = require('../models/brandModel');
 
 module.exports = {
@@ -25,7 +26,7 @@ module.exports = {
             });
         }
     },
-    
+
     //CREATE brand
     async createBrand(req, res) {
         try {
@@ -45,6 +46,7 @@ module.exports = {
         try {
             const { id } = req.params;
             const { brand_name } = req.body;
+
             await Brand.update({ brand_name }, { where: { id } });
             res.json({
                 message: 'Marca actualizada'
@@ -57,19 +59,4 @@ module.exports = {
         }
     },
 
-    //DELETE brand
-    async deleteBrand(req, res) {
-        try {
-            const { id } = req.params;
-            await Brand.destroy({ where: { id } });
-            res.json({
-                message: 'Marca eliminada'
-            });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({
-                message: 'Error en el servidor'
-            });
-        }
-    }
 }

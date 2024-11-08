@@ -4,22 +4,22 @@ const Brand = require('./brandModel');
 
 // Define the associations here
 Presentation.hasMany(Product, {
-    foreignKey: 'id',
+    foreignKey: 'presentation_id',
     as: 'products'
 });
 
 Product.belongsTo(Presentation, {
-    foreignKey: 'id',
+    foreignKey: 'presentation_id',
     as: 'presentation'
 });
 
 Brand.hasMany(Product, {
-    foreignKey: 'id',
+    foreignKey: 'brand_id',
     as: 'products'
 });
 
 Product.belongsTo(Brand, {
-    foreignKey: 'id',
+    foreignKey: 'brand_id',
     as: 'brand'
 });
 

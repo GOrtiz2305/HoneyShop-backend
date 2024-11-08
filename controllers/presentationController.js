@@ -1,10 +1,10 @@
-const presentationModel = require('../models/presentationModel');
+const Presentation = require('../models/index').Presentation;
 
 module.exports = {
     //GET all presentations
     async getPresentations(req, res) {
         try {
-          const presentations = await presentationModel.findAll();
+          const presentations = await Presentation.findAll();
           res.json(presentations);
         } catch (error) {
           console.log(error);
@@ -16,7 +16,7 @@ module.exports = {
     async getPresentation(req, res) {
         try {
             const { id } = req.params;
-            const presentation = await presentationModel.findOne({ where: { id } });
+            const presentation = await Presentation.findOne({ where: { id } });
             res.json(presentation);
         } catch (error) {
             console.error(error);
@@ -30,7 +30,8 @@ module.exports = {
     async createPresentation(req, res) {
         try {
             const { presentation_name } = req.body;
-            const presentation = await presentationModel.create({ presentation_name });
+
+            const presentation = await Presentation.create({ presentation_name });
             res.json(presentation);
         } catch (error) {
             console.error(error);
@@ -45,7 +46,8 @@ module.exports = {
         try {
             const { id } = req.params;
             const { presentation_name } = req.body;
-            await presentationModel.update({ presentation_name }, { where: { id } });
+
+            await Presentation.update({ presentation_name }, { where: { id } });
             res.json({
                 message: 'Presentación actualizada'
             });
@@ -57,19 +59,4 @@ module.exports = {
         }
     },
 
-    //DELETE presentation
-    async deletePresentation(req, res) {
-        try {
-            const { id } = req.params;
-            await presentationModel.destroy({ where: { id } });
-            res.json({
-                message: 'Presentación eliminada'
-            });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({
-                message: 'Error en el servidor'
-            });
-        }
-    }
 }

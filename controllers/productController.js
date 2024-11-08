@@ -1,25 +1,30 @@
 const presentationModel = require('../models/presentationModel');
 const brandModel = require('../models/brandModel');
 const productModel = require('../models/productModel');
-const models = require('../models/index');
+const { verifyToken } = require('./userController');
+const Presentation = require('../models/index').Presentation;
+const Brand = require('../models/index').Brand;
+const Product = require('../models/index').Product;
 
 module.exports = {
 
     //GET all products
     async getProducts(req, res) {
         try {
-            const products = await productModel.findAll({
-                include: [
-                    {
-                        model: presentationModel,
-                        as: 'presentation'
-                    },
-                    {
-                        model: brandModel,
-                        as: 'brand'
-                    }
-                ]
-            });
+            const products = await Product.findAll(
+                {
+                    include: [
+                         {
+                             model: Presentation,
+                             as: 'presentation'
+                         },
+                        {
+                            model: Brand,
+                            as: 'brand'
+                        }
+                    ]
+                }
+            );
             res.json(products);
         } catch (error) {
             console.log(error);
@@ -30,17 +35,17 @@ module.exports = {
     //GET all products with status 1
     async getProductsActive(req, res) {
         try {
-            const products = await productModel.findAll({
+            const products = await Product.findAll({
                 where: {
                     status: 1
                 },
                 include: [
                     {
-                        model: presentationModel,
+                        model: Presentation,
                         as: 'presentation'
                     },
                     {
-                        model: brandModel,
+                        model: Brand,
                         as: 'brand'
                     }
                 ]
@@ -55,17 +60,17 @@ module.exports = {
     //GET all products with status 0
     async getProductsInactive(req, res) {
         try {
-            const products = await productModel.findAll({
+            const products = await Product.findAll({
                 where: {
                     status: 0
                 },
                 include: [
                     {
-                        model: presentationModel,
+                        model: Presentation,
                         as: 'presentation'
                     },
                     {
-                        model: brandModel,
+                        model: Brand,
                         as: 'brand'
                     }
                 ]
@@ -81,18 +86,20 @@ module.exports = {
     async getProduct(req, res) {
         try {
             const { id } = req.params;
-            const product = await productModel.findByPk(id, {
-                include: [
-                    {
-                        model: presentationModel,
-                        as: 'presentation'
-                    },
-                    {
-                        model: brandModel,
-                        as: 'brand'
-                    }
-                ]
-            });
+            const product = await Product.findByPk(id, 
+                {
+                    include: [
+                        {
+                            model: Presentation,
+                            as: 'presentation'
+                        },
+                        {
+                            model: Brand,
+                            as: 'brand'
+                        }
+                    ]
+                }
+            );
             res.json(product);
         } catch (error) {
             console.log(error);
@@ -104,20 +111,22 @@ module.exports = {
     async getProductStock(req, res) {
         try {
             const { id } = req.params;
-            const product = await productModel.findByPk(id);
+
+            const product = await Product.findByPk(id);
             res.json({ stock: product.stock });
         } catch (error) {
             console.log(error);
             res.json({ error: "Error en el controlador" });
         }
     },
-    
+
     //Update product
     async updateProduct(req, res) {
         try {
             const { id } = req.params;
-            const { stock, product_name, price, discount_price, discount, product_description, image, brand_id, presentation_id, status } = req.body;
-            const product = await productModel.findByPk(id);
+            const { stock, product_name, price, product_description } = req.body;
+
+            const product = await Product.findByPk(id);
             product.stock = stock;
             product.product_name = product_name;
             product.price = price;
@@ -136,7 +145,7 @@ module.exports = {
     //Update product stock
     async updateProductStock(product_id, quantity) {
         try {
-            const product = await productModel.findByPk(product_id);
+            const product = await Product.findByPk(product_id);
 
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
@@ -162,7 +171,8 @@ module.exports = {
     async createProduct(req, res) {
         try {
             const { product_name, price, discount_price, discount, product_description, image, stock, brand_id, presentation_id, status } = req.body;
-            const product = await productModel.create({ product_name, price, discount_price, discount, product_description, image, stock, brand_id, presentation_id, status });
+
+            const product = await Product.create({ product_name, price, discount_price, discount, product_description, image, stock, brand_id, presentation_id, status });
             res.json(product);
         } catch (error) {
             console.error(error);
@@ -177,7 +187,7 @@ module.exports = {
         try {
             const { id } = req.params;
             const { stock } = req.body;
-            const product = await productModel.findByPk(id);
+            const product = await Product.findByPk(id);
             product.stock = product.stock - stock;
             await product.save();
             res.json(product);
@@ -194,7 +204,7 @@ module.exports = {
         try {
             const { id } = req.params;
             const { stock } = req.body;
-            const product = await productModel.findByPk(id);
+            const product = await Product.findByPk(id);
             product.stock = product.stock + stock;
             await product.save();
             res.json(product);
@@ -210,7 +220,8 @@ module.exports = {
     async deleteProduct(req, res) {
         try {
             const { id } = req.params;
-            const product = await productModel.findByPk(id);
+
+            const product = await Product.findByPk(id);
             product.status = 0;
             await product.save();
             res.json({ message: 'Producto eliminado' });
@@ -226,7 +237,8 @@ module.exports = {
     async activateProduct(req, res) {
         try {
             const { id } = req.params;
-            const product = await productModel.findByPk(id);
+
+            const product = await Product.findByPk(id);
             product.status = 1;
             await product.save();
             res.json({ message: 'Producto activado' });
@@ -248,7 +260,7 @@ module.exports = {
                 return res.status(400).json({ error: 'El nombre del producto es requerido y debe ser una cadena' });
             }
 
-            const products = await productModel.findAll({
+            const products = await Product.findAll({
                 where: {
                     product_name: {
                         [Op.iLike]: `%${product_name}%` // Búsqueda sin distinción de mayúsculas y minúsculas
