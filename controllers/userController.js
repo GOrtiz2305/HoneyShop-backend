@@ -139,8 +139,8 @@ module.exports = {
     async updateUser(req, res) {
         try {
             const { id } = req.params;
-            const { full_name, email, password } = req.body;
-            await userModel.update({ full_name, email, password }, { where: { id } });
+            const { email, password, role_id } = req.body;
+            await userModel.update({ email, password, role_id }, { where: { id } });
             res.json({
                 message: 'Usuario actualizado'
             });
