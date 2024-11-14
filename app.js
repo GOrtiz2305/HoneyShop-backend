@@ -39,8 +39,8 @@ app.listen(process.env.HTTP_PORT || 3000, () => {
 if (process.env.HTTPS_ENABLED === 'true') {
   try {
     const options = {
-      key: fs.readFileSync('/home/ubuntu/projects/HoneyShop-backend/privkey.pem'),
-      cert: fs.readFileSync('/home/ubuntu/projects/HoneyShop-backend/cert.pem'),
+      key: fs.readFileSync('/home/ubuntu/projects/privkey.pem'),
+      cert: fs.readFileSync('/home/ubuntu/projects/cert.pem'),
     };
 
     const httpsServer = https.createServer(options, app);
