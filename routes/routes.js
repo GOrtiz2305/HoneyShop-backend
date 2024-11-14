@@ -17,7 +17,8 @@ const orderController = require('../controllers/ordersController');
  *   get:
  *     summary: Obtiene una lista de marcas
  *     description: Retorna todas las marcas disponibles en el sistema.
- *     tags: [Brands]
+ *     tags: 
+ *       - Brands
  *     responses:
  *       200:
  *         description: Lista de marcas obtenida exitosamente.
@@ -42,7 +43,8 @@ router.get('/brands', brandController.getBrands);
  *   get:
  *     summary: Obtiene una marca por su ID
  *     description: Retorna una marca por su ID.
- *     tags: [Brands]
+ *     tags:
+ *       - Brands
  *     parameters:
  *       - in: path
  *         name: id
