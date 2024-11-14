@@ -2,7 +2,6 @@ const orderModel = require('../models/orderModel');
 const orderDetailModel = require('../models/orderDetailModel');
 const Product = require('../models/index').Product;
 const productController = require('../controllers/productController');
-const ordersController = require('../controllers/ordersController');
 const { verifyToken } = require('./userController');
 
 module.exports = {
@@ -15,6 +14,32 @@ module.exports = {
         } catch (error) {
             console.log(error);
             res.json({ error: "Error en el controlador" });
+        }
+    },
+
+    //Get all orderes where status is pending
+    async getPendingOrders(req, res) {
+        try {
+            const orders = await orderModel.findAll({ 
+                where: { 
+                    status: "Pending" 
+                } 
+            });
+            res.json(orders);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error en el servidor' });
+        }
+    },
+
+    //GET all orders where status is delivered
+    async getDeliveredOrders(req, res) {
+        try {
+            const orders = await orderModel.findAll({ where: { status: 'Delivered' } });
+            res.json(orders);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error en el servidor' });
         }
     },
 
@@ -86,20 +111,23 @@ module.exports = {
         }
     },
 
-    //Update status of order
+    //Update status of order to delivered
     async updateOrder(req, res) {
         try {
             const { id } = req.params;
-            const { status } = req.body;
+            const order = await orderModel.findOne({ where: { id } });
 
-            await orderModel.update({ status }, {
-                where: { id: id }
-            });
-            res.json({
-                message: 'Orden actualizada'
-            });
+            if (order) {
+                order.status = 'Delivered';
+                await order.save();
+                res.json(order);
+            } else {
+                res.status(404).json({ message: 'Orden no encontrada' });
+            }
+
         } catch (error) {
-            throw new Error('Error al actualizar el monto total de la orden');
+            console.error(error);
+            res.status(500).json({ message: 'Error en el servidor' });
         }
-    },
+    }
 }

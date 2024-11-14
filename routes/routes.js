@@ -906,7 +906,10 @@ router.get('/orders/:id', orderController.getOrder);
  *                   format: date-time
  *                   description: Fecha de actualización de la orden
  */
-router.get('/orders', userController.verifyToken, orderController.getOrders);
+router.get('/orders',  orderController.getOrders);
+
+router.get('/pending/orders', orderController.getPendingOrders);
+router.get('/delivered/orders', orderController.getDeliveredOrders);
 /**
  * @swagger
  * /api/orders/client/{client_id}:
