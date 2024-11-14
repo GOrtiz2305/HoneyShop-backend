@@ -69,7 +69,17 @@ module.exports = {
     async getOrder(req, res) {
         try {
             const { id } = req.params;
-            const order = await orderModel.findOne({ where: { id } });
+            const order = await orderModel.findOne(
+                { 
+                    include: { 
+                        model: Client,
+                        as: 'client'
+                    },
+                    where: { 
+                        id 
+                    } 
+                }
+            );
             res.json(order);
         } catch (error) {
             console.error(error);
@@ -83,7 +93,15 @@ module.exports = {
         try {
             const { client_id } = req.params;
 
-            const orders = await orderModel.findAll({ where: { client_id } });
+            const orders = await orderModel.findAll({ 
+                include: { 
+                    model: Client,
+                    as: 'client'
+                },
+                where: { 
+                    client_id 
+                } 
+            });
             res.json(orders);
         } catch (error) {
             console.error(error);

@@ -976,7 +976,7 @@ router.get('/delivered/orders', userController.verificationOfTokenAndRole, order
  *                   format: date-time
  *                   description: Fecha de actualización de la orden
  */
-router.get('/orders/client/:client_id', userController.verifyToken, orderController.getOrdersByClientId);
+router.get('/orders/client/:client_id', userController.verificationOfToken, orderController.getOrdersByClientId);
 //Card API
 router.get('/cards', cardController.allCards);
 router.get('/isUserAuth', userController.verifyToken);
