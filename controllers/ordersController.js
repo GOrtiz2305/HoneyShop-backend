@@ -2,14 +2,21 @@ const orderModel = require('../models/orderModel');
 const orderDetailModel = require('../models/orderDetailModel');
 const Product = require('../models/index').Product;
 const productController = require('../controllers/productController');
-const { verifyToken } = require('./userController');
+const Client = require('../models/index').Client;
 
 module.exports = {
 
     //GET all orders
     async getOrders(req, res) {
         try {
-            const orders = await orderModel.findAll();
+            const orders = await orderModel.findAll(
+                { 
+                    include: { 
+                        model: Client,
+                        as: 'client'
+                    } 
+                }
+            );
             res.json(orders);
         } catch (error) {
             console.log(error);
@@ -20,11 +27,17 @@ module.exports = {
     //Get all orderes where status is pending
     async getPendingOrders(req, res) {
         try {
-            const orders = await orderModel.findAll({ 
-                where: { 
-                    status: "Pending" 
-                } 
-            });
+            const orders = await orderModel.findAll(
+                { 
+                    include: { 
+                        model: Client,
+                        as: 'client'
+                    },
+                    where: { 
+                        status: 'Pending'
+                    } 
+                }
+            );
             res.json(orders);
         } catch (error) {
             console.error(error);
@@ -35,7 +48,16 @@ module.exports = {
     //GET all orders where status is delivered
     async getDeliveredOrders(req, res) {
         try {
-            const orders = await orderModel.findAll({ where: { status: 'Delivered' } });
+            const orders = await orderModel.findAll(
+                { 
+                    include: { 
+                        model: Client,
+                        as: 'client'
+                    },
+                    where: { 
+                        status: 'Delivered' 
+                    } 
+                });
             res.json(orders);
         } catch (error) {
             console.error(error);

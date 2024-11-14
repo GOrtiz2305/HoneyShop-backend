@@ -1,6 +1,8 @@
 const Product = require('./productModel');
 const Presentation = require('./presentationModel');
 const Brand = require('./brandModel');
+const Client = require('./clientModel');
+const Order = require('./orderModel');
 
 // Define the associations here
 Presentation.hasMany(Product, {
@@ -23,9 +25,20 @@ Product.belongsTo(Brand, {
     as: 'brand'
 });
 
+Client.hasMany(Order, {
+    foreignKey: 'client_id',
+    as: 'orders'
+});
+
+Order.belongsTo(Client, {
+    foreignKey: 'client_id',
+    as: 'client'
+});
+
 // Export the models
 module.exports = {
     Product,
     Presentation,
-    Brand
+    Brand,
+    Client,
 };
